@@ -801,39 +801,39 @@ function submitEntry() {
 
   // ── INTEGRATION (uncomment one) ─────────────────────────────
   //
-  const hsFields = [
-    {name:'firstname', value: entry.firstname},
-    {name:'lastname',  value: entry.lastname},
-    {name:'email',     value: entry.email},
-    {name:'company',   value: entry.company},
-    {name:'phone',     value: entry.phone},
-    {name:'jobtitle',  value: entry.jobtitle},
-    {name:'role',      value: entry.jobtitle},
-    {name:'wc_pick_1st', value: entry.wc_pick_1st},
-    {name:'wc_pick_2nd', value: entry.wc_pick_2nd},
-    {name:'wc_pick_3rd', value: entry.wc_pick_3rd},
-    {name:'wc_pick_4th', value: entry.wc_pick_4th},
-    {name:'wc_tiebreak', value: entry.wc_tiebreak},
-  ];
-  const hsPayload = {
-    fields: hsFields,
-    context: { pageUri: 'https://pzheng98.github.io/camber-world-cup-challenge/', pageName: 'Camber World Cup Challenge' },
-    legalConsentOptions: { consent: { consentToProcess: true, text: 'I agree to allow Camber to store and process my personal data.' } }
-  };
-  const xhr = new XMLHttpRequest();
+  var hsData = JSON.stringify({
+    fields: [
+      {objectTypeId: '0-1', name: 'firstname', value: entry.firstname},
+      {objectTypeId: '0-1', name: 'lastname',  value: entry.lastname},
+      {objectTypeId: '0-1', name: 'email',     value: entry.email},
+      {objectTypeId: '0-1', name: 'company',   value: entry.company},
+      {objectTypeId: '0-1', name: 'phone',     value: entry.phone},
+      {objectTypeId: '0-1', name: 'jobtitle',  value: entry.jobtitle},
+      {objectTypeId: '0-1', name: 'wc_pick_1st', value: entry.wc_pick_1st},
+      {objectTypeId: '0-1', name: 'wc_pick_2nd', value: entry.wc_pick_2nd},
+      {objectTypeId: '0-1', name: 'wc_pick_3rd', value: entry.wc_pick_3rd},
+      {objectTypeId: '0-1', name: 'wc_pick_4th', value: entry.wc_pick_4th},
+      {objectTypeId: '0-1', name: 'wc_tiebreak', value: entry.wc_tiebreak},
+    ],
+    context: {
+      pageUri: 'https://pzheng98.github.io/camber-world-cup-challenge/',
+      pageName: 'Camber World Cup Challenge'
+    }
+  });
+  var xhr = new XMLHttpRequest();
   xhr.open('POST', 'https://api.hsforms.com/submissions/v3/integration/submit/9003766/bf4633b4-ba21-451d-aef5-6c3852d7a9db');
   xhr.setRequestHeader('Content-Type', 'application/json');
   xhr.onreadystatechange = function() {
     if (xhr.readyState === 4) {
       if (xhr.status === 200) {
-        console.log('HubSpot submission success:', xhr.responseText);
+        console.log('HubSpot success:', xhr.responseText);
       } else {
         console.error('HubSpot error ' + xhr.status + ':', xhr.responseText);
         alert('HubSpot error ' + xhr.status + ': ' + xhr.responseText);
       }
     }
   };
-  xhr.send(JSON.stringify(hsPayload));
+  xhr.send(hsData);
 
   console.log('Entry payload:', entry);
   showConfirmation(entry);
