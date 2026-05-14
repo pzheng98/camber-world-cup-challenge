@@ -642,7 +642,7 @@ const TEAMS = [
   {name:"Poland",flag:"🇵🇱",conf:"UEFA"},
   {name:"Serbia",flag:"🇷🇸",conf:"UEFA"},
   {name:"Ukraine",flag:"🇺🇦",conf:"UEFA"},
-  {name:"Türkiye",flag:"🇹🇷",conf:"UEFA"},
+  {name:"Turkiye",flag:"🇹🇷",conf:"UEFA"},
   {name:"Hungary",flag:"🇭🇺",conf:"UEFA"},
   {name:"Slovakia",flag:"🇸🇰",conf:"UEFA"},
   {name:"Scotland",flag:"🏴",conf:"UEFA"},
@@ -803,17 +803,17 @@ function submitEntry() {
   //
   var hsData = JSON.stringify({
     fields: [
-      {objectTypeId: '0-1', name: 'firstname', value: entry.firstname},
-      {objectTypeId: '0-1', name: 'lastname',  value: entry.lastname},
-      {objectTypeId: '0-1', name: 'email',     value: entry.email},
-      {objectTypeId: '0-1', name: 'company',   value: entry.company},
-      {objectTypeId: '0-1', name: 'phone',     value: entry.phone},
-      {objectTypeId: '0-1', name: 'jobtitle',  value: entry.jobtitle},
-      {objectTypeId: '0-1', name: 'wc_pick_1', value: entry.wc_pick_1st},
-      {objectTypeId: '0-1', name: 'wc_pick_2', value: entry.wc_pick_2nd},
-      {objectTypeId: '0-1', name: 'wc_pick_3', value: entry.wc_pick_3rd},
-      {objectTypeId: '0-1', name: 'wc_pick_4', value: entry.wc_pick_4th},
-      {objectTypeId: '0-1', name: 'wc_tiebreaker', value: entry.wc_tiebreak},
+      {name: 'firstname',    value: entry.firstname    || ''},
+      {name: 'lastname',     value: entry.lastname     || ''},
+      {name: 'email',        value: entry.email        || ''},
+      {name: 'company',      value: entry.company      || ''},
+      {name: 'phone',        value: entry.phone        || ''},
+      {name: 'jobtitle',     value: entry.jobtitle     || ''},
+      {name: 'wc_pick_1',    value: entry.wc_pick_1    || ''},
+      {name: 'wc_pick_2',    value: entry.wc_pick_2    || ''},
+      {name: 'wc_pick_3',    value: entry.wc_pick_3    || ''},
+      {name: 'wc_pick_4',    value: entry.wc_pick_4    || ''},
+      {name: 'wc_tiebreaker',value: entry.wc_tiebreaker|| ''},
     ],
     context: {
       pageUri: 'https://pzheng98.github.io/camber-world-cup-challenge/',
@@ -853,7 +853,7 @@ function showConfirmation(entry) {
     if (!t) return '';
     return '<div class="picks-recap-row"><span class="rr-medal">' + medals[i] + '</span><span class="rr-place">' + places[i] + '</span><span class="rr-flag">' + t.flag + '</span><span class="rr-name">' + t.name + '</span></div>';
   }).join('');
-  const score = (entry.wc_tiebreak || '0-0').replace('-',' – ');
+  const score = (entry.wc_tiebreaker || '0-0').replace('-',' – ');
   const scoreRow = '<div class="picks-recap-row"><span class="rr-medal">⚽</span><span class="rr-place">Final</span><span class="rr-name" style="font-weight:600;font-size:1.05rem;color:var(--green)">' + score + '</span></div>';
 
   document.getElementById('picksRecap').innerHTML =
