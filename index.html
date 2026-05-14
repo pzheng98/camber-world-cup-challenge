@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Camber World Cup Challenge 2026</title>
+<script charset="utf-8" type="text/javascript" src="https://js.hsforms.net/forms/embed/v2.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -793,14 +794,37 @@ function submitEntry() {
 
   // ── INTEGRATION (uncomment one) ─────────────────────────────
   //
-  fetch('https://api.hsforms.com/submissions/v3/integration/submit/9003766/bf4633b4-ba21-451d-aef5-6c3852d7a9db', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-      fields: Object.entries(entry).map(([name,value]) => ({name, value: String(value)})),
-      context: { pageUri: window.location.href, pageName: 'Camber World Cup Challenge' }
-    })
-  }).catch(err => console.error('HubSpot submission error:', err));
+  const hsFields = [
+    {name:'firstname', value: entry.firstname},
+    {name:'lastname',  value: entry.lastname},
+    {name:'email',     value: entry.email},
+    {name:'company',   value: entry.company},
+    {name:'jobtitle',  value: entry.jobtitle},
+    {name:'country',   value: entry.country},
+    {name:'wc_pick_1st', value: entry.wc_pick_1st},
+    {name:'wc_pick_2nd', value: entry.wc_pick_2nd},
+    {name:'wc_pick_3rd', value: entry.wc_pick_3rd},
+    {name:'wc_pick_4th', value: entry.wc_pick_4th},
+    {name:'wc_tiebreak', value: entry.wc_tiebreak},
+  ];
+  const hsPayload = {
+    fields: hsFields,
+    context: { pageUri: window.location.href, pageName: 'Camber World Cup Challenge' },
+    legalConsentOptions: { consent: { consentToProcess: true, text: 'I agree to allow Camber to store and process my personal data.' } }
+  };
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', 'https://api.hsforms.com/submissions/v3/integration/submit/9003766/bf4633b4-ba21-451d-aef5-6c3852d7a9db');
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4) {
+      if (xhr.status === 200) {
+        console.log('HubSpot submission success');
+      } else {
+        console.error('HubSpot submission failed:', xhr.status, xhr.responseText);
+      }
+    }
+  };
+  xhr.send(JSON.stringify(hsPayload));
 
   console.log('Entry payload:', entry);
   showConfirmation(entry);
