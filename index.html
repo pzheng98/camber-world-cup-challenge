@@ -566,6 +566,11 @@
         <input type="email" id="email" placeholder="jordan@yourcompany.com" oninput="clearErr('field-email')">
         <span class="validation-msg">Enter a valid work email</span>
       </div>
+      <div class="field full" id="field-phone">
+        <label>Phone number</label>
+        <input type="tel" id="phone" placeholder="+1 (555) 000-0000" oninput="clearErr('field-phone')">
+        <span class="validation-msg">Required</span>
+      </div>
       <div class="field full" id="field-company">
         <label>Company</label>
         <input type="text" id="company" placeholder="Acme Health Group" oninput="clearErr('field-company')">
@@ -751,6 +756,7 @@ function clearErr(id) {
 function validate() {
   let ok = true;
   [{id:'fname',fid:'field-fname',fn:v=>v.length>0},
+   {id:'phone',fid:'field-phone',fn:v=>v.length>0},
    {id:'lname',fid:'field-lname',fn:v=>v.length>0},
    {id:'email',fid:'field-email',fn:v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)},
    {id:'company',fid:'field-company',fn:v=>v.length>0},
@@ -781,6 +787,7 @@ function submitEntry() {
     company:          document.getElementById('company').value.trim(),
     jobtitle:         document.getElementById('role').value.trim(),
     country:          document.getElementById('country').value,
+    phone:            document.getElementById('phone').value.trim(),
     marketing_opt_in: false,
     wc_pick_1st:      picks[0],
     wc_pick_2nd:      picks[1],
@@ -799,6 +806,7 @@ function submitEntry() {
     {name:'lastname',  value: entry.lastname},
     {name:'email',     value: entry.email},
     {name:'company',   value: entry.company},
+    {name:'phone',     value: entry.phone},
     {name:'jobtitle',  value: entry.jobtitle},
     {name:'role',      value: entry.jobtitle},
     {name:'wc_pick_1st', value: entry.wc_pick_1st},
