@@ -800,7 +800,7 @@ function submitEntry() {
     {name:'email',     value: entry.email},
     {name:'company',   value: entry.company},
     {name:'jobtitle',  value: entry.jobtitle},
-    {name:'country',   value: entry.country},
+    {name:'role',      value: entry.jobtitle},
     {name:'wc_pick_1st', value: entry.wc_pick_1st},
     {name:'wc_pick_2nd', value: entry.wc_pick_2nd},
     {name:'wc_pick_3rd', value: entry.wc_pick_3rd},
@@ -818,9 +818,10 @@ function submitEntry() {
   xhr.onreadystatechange = function() {
     if (xhr.readyState === 4) {
       if (xhr.status === 200) {
-        console.log('HubSpot submission success');
+        console.log('HubSpot submission success:', xhr.responseText);
       } else {
-        console.error('HubSpot submission failed:', xhr.status, xhr.responseText);
+        console.error('HubSpot error ' + xhr.status + ':', xhr.responseText);
+        alert('HubSpot error ' + xhr.status + ': ' + xhr.responseText);
       }
     }
   };
