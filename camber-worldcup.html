@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Camber World Cup Challenge 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream:        #F4F5F3;
+    --cream-2:      #EAEBE8;
+    --cream-3:      #DDDEDD;
+    --white:        #FFFFFF;
+    --green:        #2D6A4F;
+    --green-mid:    #40916C;
+    --green-light:  #D4EDE3;
+    --green-xlight: #EDF7F2;
+    --charcoal:     #1E2220;
+    --charcoal-2:   #2E3530;
+    --muted:        #6B7570;
+    --muted-light:  #9BABA4;
+    --gold:         #B8843A;
+    --gold-light:   #F5E9D4;
+    --border:       #D8D9D7;
+    --border-light: #EAEBE8;
+    --red:          #B03A2E;
+    --f: 'Inter', system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--cream);
+    color: var(--charcoal);
+    font-family: var(--f);
+    font-size: 16px;
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+
+  #progressBar {
+    position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+    background: var(--green); transition: width 0.3s; z-index: 300;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 3px; left: 0; right: 0; z-index: 200;
+    height: 58px; display: flex; align-items: center;
+    justify-content: space-between; padding: 0 2rem;
+    background: rgba(246,243,236,0.95); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-light);
+  }
+  .nav-logo {
+    font-size: 1.05rem; font-weight: 600; letter-spacing: -0.02em;
+    color: var(--green); text-decoration: none;
+  }
+  .nav-logo span { font-weight: 300; color: var(--charcoal); }
+  .nav-pill {
+    font-size: 0.68rem; font-weight: 500; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--green); background: var(--green-xlight);
+    border: 1px solid rgba(45,106,79,0.2); border-radius: 100px; padding: 5px 14px;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center; padding: 8rem 1.5rem 5rem;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 65% 55% at 50% 105%, rgba(45,106,79,0.09) 0%, transparent 65%),
+      radial-gradient(ellipse 35% 28% at 10% 15%, rgba(184,132,58,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 28% 28% at 90% 12%, rgba(45,106,79,0.05) 0%, transparent 60%);
+  }
+  .hero-dots {
+    position: absolute; inset: 0; pointer-events: none; opacity: 0.5;
+    background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  .hero-content { position: relative; z-index: 2; }
+
+  .hero-ball {
+    font-size: 4.5rem; line-height: 1; margin: 0 auto 1.75rem;
+    display: block; animation: float 3.5s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-10px); }
+  }
+
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.68rem; font-weight: 500; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--green);
+    background: var(--green-xlight); border: 1px solid rgba(45,106,79,0.18);
+    border-radius: 100px; padding: 5px 14px; margin-bottom: 1.5rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.8rem, 8vw, 6rem); font-weight: 600;
+    line-height: 1.05; letter-spacing: -0.01em; color: var(--charcoal);
+    max-width: 760px; margin: 0 auto 1.25rem;
+  }
+  .hero h1 .accent { color: var(--green); }
+
+  .hero-sub {
+    font-size: 1.05rem; font-weight: 300; color: var(--muted);
+    max-width: 420px; margin: 0 auto 2.5rem; line-height: 1.7;
+  }
+
+  .prize-strip {
+    display: inline-flex; align-items: center; gap: 16px;
+    background: #DFE5DC; border: 1px solid rgba(45,106,79,0.2);
+    border-radius: 10px; padding: 12px 24px; margin-bottom: 2.5rem;
+    flex-wrap: wrap; justify-content: center;
+  }
+  .prize-item { display: flex; align-items: center; gap: 6px; font-size: 0.88rem; color: var(--green); }
+  .prize-item strong { font-size: 1rem; font-weight: 600; color: var(--green); }
+  .prize-div { width: 1px; height: 18px; background: rgba(45,106,79,0.25); }
+
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 9px;
+    background: var(--green); color: var(--white);
+    font-family: var(--f); font-size: 0.95rem; font-weight: 600;
+    letter-spacing: 0.01em; padding: 15px 34px; border-radius: 6px;
+    border: none; cursor: pointer; text-decoration: none;
+    box-shadow: 0 2px 14px rgba(45,106,79,0.22);
+    transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+  }
+  .btn-primary:hover { background: var(--charcoal); box-shadow: 0 4px 20px rgba(30,34,32,0.18); transform: translateY(-1px); }
+
+  .hero-meta {
+    margin-top: 1.5rem; display: flex; align-items: center;
+    justify-content: center; gap: 20px; flex-wrap: wrap;
+  }
+  .hero-meta-item { font-size: 0.75rem; font-weight: 400; letter-spacing: 0.05em; color: var(--muted-light); }
+
+  /* SECTIONS */
+  .section { padding: 6rem 1.5rem; }
+  .section-inner { max-width: 1060px; margin: 0 auto; }
+  .section-eyebrow {
+    font-size: 0.68rem; font-weight: 600; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--green); margin-bottom: 0.6rem;
+  }
+  .section-title {
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 600;
+    line-height: 1.1; letter-spacing: -0.01em; color: var(--charcoal); margin-bottom: 3rem;
+  }
+  .section-title .accent { color: var(--green); }
+
+  /* STEPS */
+  .steps-wrap {
+    background: var(--white); border: 1px solid var(--border-light); border-radius: 14px; overflow: hidden;
+  }
+  .steps { display: grid; grid-template-columns: repeat(3,1fr); }
+  .step { padding: 2rem; border-right: 1px solid var(--border-light); }
+  .step:last-child { border-right: none; }
+  .step-header { display: flex; align-items: baseline; gap: 0.6rem; margin-bottom: 0.75rem; }
+  .step-num { font-size: 2.5rem; font-weight: 600; color: var(--cream-3); line-height: 1; user-select: none; letter-spacing: -0.01em; flex-shrink: 0; }
+  .step-icon {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--green-xlight); border: 1px solid rgba(45,106,79,0.18);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; margin-bottom: 1.25rem;
+  }
+  .step h3 { font-size: 1.05rem; font-weight: 600; color: var(--charcoal); margin-bottom: 0.5rem; letter-spacing: -0.01em; }
+  .step p { font-size: 0.87rem; color: var(--muted); line-height: 1.65; font-weight: 400; }
+  .step-tag {
+    display: inline-block; margin-top: 1rem;
+    font-size: 0.68rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--gold); background: var(--gold-light);
+    border: 1px solid rgba(184,132,58,0.22); border-radius: 100px; padding: 3px 10px;
+  }
+
+  /* PICKER */
+  .picker-section {
+    background: var(--white);
+    border-top: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
+    padding: 5rem 1.5rem;
+  }
+  .picker-layout {
+    display: grid; grid-template-columns: 1fr 310px; gap: 2.5rem;
+    align-items: start; max-width: 1060px; margin: 2.5rem auto 0;
+  }
+
+  .search-input {
+    width: 100%; background: var(--cream); border: 1px solid var(--border);
+    border-radius: 6px; color: var(--charcoal); font-family: var(--f);
+    font-size: 0.9rem; padding: 10px 14px; outline: none;
+    transition: border-color 0.15s; margin-bottom: 0.75rem;
+  }
+  .search-input::placeholder { color: var(--muted-light); }
+  .search-input:focus { border-color: var(--green); }
+
+  .region-tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 1rem; }
+  .region-tab {
+    font-size: 0.68rem; font-weight: 500; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 5px 11px; border-radius: 4px;
+    border: 1px solid var(--border); background: transparent;
+    color: var(--muted); cursor: pointer; transition: all 0.15s; font-family: var(--f);
+  }
+  .region-tab:hover { border-color: var(--green-mid); color: var(--green); }
+  .region-tab.active { border-color: var(--green); color: var(--green); background: var(--green-xlight); }
+
+  .teams-grid {
+    display: grid; grid-template-columns: repeat(auto-fill,minmax(128px,1fr));
+    gap: 5px; max-height: 380px; overflow-y: auto; padding-right: 4px;
+  }
+  .teams-grid::-webkit-scrollbar { width: 4px; }
+  .teams-grid::-webkit-scrollbar-thumb { background: var(--cream-3); border-radius: 4px; }
+
+  .team-chip {
+    display: flex; align-items: center; gap: 7px;
+    background: var(--cream); border: 1px solid var(--border-light);
+    border-radius: 6px; padding: 7px 9px; cursor: pointer;
+    font-size: 0.82rem; font-weight: 400; color: var(--charcoal); user-select: none;
+    transition: all 0.15s; font-family: var(--f);
+  }
+  .team-chip:hover:not(.selected):not(.disabled) {
+    border-color: var(--green-mid); background: var(--green-xlight); color: var(--green);
+  }
+  .team-chip.selected {
+    border-color: var(--green); background: var(--green-light);
+    color: var(--green); font-weight: 600; cursor: default;
+  }
+  .team-chip.disabled { opacity: 0.35; cursor: not-allowed; }
+  .team-flag { font-size: 1.1rem; line-height: 1; }
+
+  .bracket-panel { position: sticky; top: 80px; }
+  .bracket-label {
+    font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--muted-light); margin-bottom: 0.75rem;
+  }
+  .bracket-slots { display: flex; flex-direction: column; gap: 6px; }
+  .bracket-slot {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--cream); border: 1px dashed var(--border);
+    border-radius: 8px; padding: 11px 13px; min-height: 52px;
+    cursor: pointer; transition: all 0.18s;
+  }
+  .bracket-slot.filled { border-style: solid; border-color: var(--green); background: var(--green-xlight); }
+  .slot-medal { font-size: 0.75rem; font-weight: 600; min-width: 26px; width: 26px; height: 26px; border-radius: 50%; background: var(--green-light); color: var(--green); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .slot-info { flex: 1; }
+  .slot-place {
+    font-size: 0.62rem; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted-light); margin-bottom: 1px;
+  }
+  .slot-empty { font-size: 0.8rem; color: var(--muted-light); }
+  .slot-team-row { display: flex; align-items: center; gap: 6px; }
+  .slot-name { font-size: 0.88rem; font-weight: 600; color: var(--green); }
+  .slot-flag { font-size: 1rem; }
+  .slot-remove {
+    background: none; border: none; color: var(--muted-light);
+    cursor: pointer; font-size: 0.95rem; padding: 0 0 0 4px;
+    transition: color 0.15s; line-height: 1;
+  }
+  .slot-remove:hover { color: var(--red); }
+
+  .tiebreaker {
+    margin-top: 1.5rem; padding-top: 1.5rem;
+    border-top: 1px solid var(--border-light);
+  }
+  .tb-label {
+    font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--muted-light); margin-bottom: 3px;
+  }
+  .tb-sub { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.8rem; font-weight: 400; }
+  .score-inputs { display: flex; align-items: center; gap: 10px; }
+  .score-wrap { flex: 1; text-align: center; }
+  .score-wrap label {
+    display: block; font-size: 0.65rem; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px;
+  }
+  .score-wrap input {
+    width: 100%; background: var(--cream); border: 1px solid var(--border);
+    border-radius: 6px; color: var(--charcoal); font-family: var(--f);
+    font-size: 2rem; font-weight: 600; letter-spacing: -0.01em;
+    padding: 8px; text-align: center; outline: none; transition: border-color 0.15s;
+  }
+  .score-wrap input:focus { border-color: var(--green); }
+  .score-dash { font-size: 1.5rem; font-weight: 300; color: var(--muted-light); padding-top: 1.3rem; }
+
+  /* FORM */
+  .form-section { padding: 5rem 1.5rem; background: var(--cream); }
+  .form-card {
+    background: var(--white); border: 1px solid var(--border-light);
+    border-radius: 14px; padding: 2.5rem; max-width: 620px; margin: 2rem auto 0;
+  }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field.full { grid-column: 1 / -1; }
+  .field label {
+    font-size: 0.68rem; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .field input, .field select {
+    background: var(--cream); border: 1px solid var(--border);
+    border-radius: 6px; color: var(--charcoal); font-family: var(--f);
+    font-size: 0.92rem; font-weight: 400; padding: 10px 12px; outline: none;
+    transition: border-color 0.15s, background 0.15s; width: 100%;
+  }
+  .field input::placeholder { color: var(--muted-light); }
+  .field input:focus, .field select:focus { border-color: var(--green); background: var(--white); }
+  .field select option { background: var(--white); }
+  .validation-msg { font-size: 0.72rem; color: var(--red); display: none; font-weight: 400; }
+  .field.error input, .field.error select { border-color: var(--red); }
+  .field.error .validation-msg { display: block; }
+
+  .opt-in {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 1rem 1.1rem; background: var(--cream);
+    border: 1px solid var(--border-light); border-radius: 8px;
+    margin: 1.25rem 0; cursor: pointer;
+  }
+  .opt-in input[type="checkbox"] {
+    width: 16px; height: 16px; min-width: 16px;
+    margin-top: 2px; accent-color: var(--green);
+  }
+  .opt-in-text { font-size: 0.82rem; color: var(--muted); line-height: 1.55; font-weight: 400; }
+  .opt-in-text strong { color: var(--charcoal); font-weight: 600; }
+
+  .btn-submit {
+    width: 100%; background: var(--green); color: var(--white);
+    font-family: var(--f); font-size: 0.95rem; font-weight: 600;
+    letter-spacing: 0.01em; padding: 15px; border-radius: 6px; border: none;
+    cursor: pointer; box-shadow: 0 2px 12px rgba(45,106,79,0.2);
+    transition: background 0.15s, box-shadow 0.15s;
+  }
+  .btn-submit:hover { background: var(--charcoal); box-shadow: 0 4px 18px rgba(30,34,32,0.16); }
+  .btn-submit:disabled { opacity: 0.4; cursor: not-allowed; }
+  .form-fine { font-size: 0.72rem; color: var(--muted-light); text-align: center; margin-top: 1rem; line-height: 1.55; font-weight: 400; }
+
+  /* CONFIRMATION */
+  #confirmation {
+    display: none; min-height: 100vh;
+    flex-direction: column; align-items: center; justify-content: center;
+    padding: 5rem 1.5rem; text-align: center; background: var(--cream);
+  }
+  .confirm-card {
+    background: var(--white); border: 1px solid var(--border-light);
+    border-radius: 14px; padding: 3rem 2.5rem;
+    max-width: 520px; width: 100%;
+  }
+  .confirm-icon { font-size: 2.8rem; margin-bottom: 1.25rem; }
+  .confirm-h {
+    font-size: 2.2rem; font-weight: 600; letter-spacing: -0.01em;
+    color: var(--charcoal); margin-bottom: 0.75rem;
+  }
+  .confirm-h .accent { color: var(--green); }
+  .confirm-p { font-size: 0.88rem; color: var(--muted); margin-bottom: 2rem; line-height: 1.65; font-weight: 400; }
+  .picks-recap {
+    background: var(--cream); border: 1px solid var(--border-light);
+    border-radius: 8px; overflow: hidden; text-align: left; margin-bottom: 1.5rem;
+  }
+  .picks-recap-hd {
+    font-size: 0.65rem; font-weight: 600; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--muted-light);
+    padding: 0.7rem 1rem; background: var(--white);
+    border-bottom: 1px solid var(--border-light);
+  }
+  .picks-recap-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 1rem; border-bottom: 1px solid var(--border-light);
+    font-size: 0.87rem;
+  }
+  .picks-recap-row:last-child { border-bottom: none; }
+  .rr-medal { font-size: 1.1rem; min-width: 22px; }
+  .rr-place { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted-light); min-width: 60px; }
+  .rr-flag { font-size: 0.95rem; }
+  .rr-name { font-weight: 600; flex: 1; }
+
+  .share-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .share-btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--cream); border: 1px solid var(--border);
+    border-radius: 6px; color: var(--charcoal); font-size: 0.85rem; font-family: var(--f);
+    font-weight: 500; padding: 9px 18px; cursor: pointer; transition: all 0.15s;
+  }
+  .share-btn:hover { background: var(--green-xlight); border-color: var(--green); color: var(--green); }
+
+  footer {
+    background: var(--charcoal-2); color: rgba(255,255,255,0.4);
+    text-align: center; font-size: 0.72rem; padding: 1.5rem;
+    letter-spacing: 0.05em; font-weight: 400;
+  }
+  footer a { color: rgba(255,255,255,0.4); text-decoration: none; }
+  footer a:hover { color: rgba(255,255,255,0.65); }
+
+  @media (max-width: 780px) {
+    .steps { grid-template-columns: 1fr; }
+    .step { border-right: none; border-bottom: 1px solid var(--border-light); }
+    .step:last-child { border-bottom: none; }
+    .picker-layout { grid-template-columns: 1fr; }
+    .bracket-panel { position: static; }
+    .form-grid { grid-template-columns: 1fr; }
+    .prize-div { display: none; }
+  }
+  @media (max-width: 480px) {
+    .hero h1 { font-size: 2.4rem; }
+    nav { padding: 0 1rem; }
+    .form-card, .confirm-card { padding: 1.5rem 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progressBar"></div>
+
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="hero-dots"></div>
+  <div class="hero-content">
+
+    <span class="hero-ball">⚽</span>
+
+    <div class="eyebrow">Camber World Cup Challenge 2026</div>
+
+    <h1>Predict the<br><span class="accent">champion.</span><br>Win big.</h1>
+
+    <p class="hero-sub">Pick the top 4 finishers, call the final score, and you could win $500 plus $500 donated to a charity of your choice.</p>
+
+    <div class="prize-strip">
+      <div class="prize-item">🏆 <strong>$500</strong> cash prize</div>
+      <div class="prize-div"></div>
+      <div class="prize-item">💚 <strong>$500</strong> to your charity</div>
+      <div class="prize-div"></div>
+      <div class="prize-item">One winner · US entrants</div>
+    </div>
+
+    <a href="#picks" class="btn-primary">Make Your Picks →</a>
+
+    <div class="hero-meta">
+      <span class="hero-meta-item">⏱ 2 minutes to enter</span>
+      <span class="hero-meta-item">🔒 No purchase necessary</span>
+      <span class="hero-meta-item">📅 Closes at kickoff</span>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-eyebrow">How it works</div>
+    <h2 class="section-title">Three steps.<br><span class="accent">One winner.</span></h2>
+    <div class="steps-wrap">
+      <div class="steps">
+        <div class="step">
+          <div class="step-header"><div class="step-num">1</div><h3>Rank your top 4</h3></div>
+          <p>Pick which four nations finish 1st through 4th.</p>
+        </div>
+        <div class="step">
+          <div class="step-header"><div class="step-num">2</div><h3>Call the final score</h3></div>
+          <p>Predict the exact scoreline of the championship match. Closest tiebreaker wins when brackets tie.</p>
+        </div>
+        <div class="step">
+          <div class="step-header"><div class="step-num">3</div><h3>Win $500 + $500</h3></div>
+          <p>Closest bracket takes $500 cash and $500 donated to a charity of their choice. Open to US residents.</p>
+          <span class="step-tag">One entry per person · Free to enter</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PICKS -->
+<section class="picker-section" id="picks">
+  <div class="section-inner">
+    <div class="section-eyebrow">Your bracket</div>
+    <h2 class="section-title">Make your <span class="accent">picks.</span></h2>
+  </div>
+  <div class="picker-layout">
+    <div>
+      <input class="search-input" type="text" id="teamSearch" placeholder="Search teams..." oninput="filterTeams()" autocomplete="off">
+      <div class="region-tabs">
+        <button class="region-tab active" onclick="filterRegion('ALL',this)">All</button>
+        <button class="region-tab" onclick="filterRegion('UEFA',this)">Europe</button>
+        <button class="region-tab" onclick="filterRegion('CONMEBOL',this)">S. America</button>
+        <button class="region-tab" onclick="filterRegion('CONCACAF',this)">N. America</button>
+        <button class="region-tab" onclick="filterRegion('CAF',this)">Africa</button>
+        <button class="region-tab" onclick="filterRegion('AFC',this)">Asia/Pac</button>
+      </div>
+      <div class="teams-grid" id="teamsGrid"></div>
+    </div>
+
+    <div class="bracket-panel">
+      <div class="bracket-label">Your podium — tap a team to fill</div>
+      <div class="bracket-slots">
+        <div class="bracket-slot" id="slot-0" onclick="clearSlot(0)">
+          <div class="slot-medal">1</div>
+          <div class="slot-info">
+            <div class="slot-place">1st place</div>
+            <div id="slot-team-0"><span class="slot-empty">Empty</span></div>
+          </div>
+        </div>
+        <div class="bracket-slot" id="slot-1" onclick="clearSlot(1)">
+          <div class="slot-medal">2</div>
+          <div class="slot-info">
+            <div class="slot-place">2nd place</div>
+            <div id="slot-team-1"><span class="slot-empty">Empty</span></div>
+          </div>
+        </div>
+        <div class="bracket-slot" id="slot-2" onclick="clearSlot(2)">
+          <div class="slot-medal">3</div>
+          <div class="slot-info">
+            <div class="slot-place">3rd place</div>
+            <div id="slot-team-2"><span class="slot-empty">Empty</span></div>
+          </div>
+        </div>
+        <div class="bracket-slot" id="slot-3" onclick="clearSlot(3)">
+          <div class="slot-medal">4</div>
+          <div class="slot-info">
+            <div class="slot-place">4th place</div>
+            <div id="slot-team-3"><span class="slot-empty">Empty</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tiebreaker">
+        <div class="tb-label">Tiebreaker</div>
+        <div class="tb-sub">Predict the final match score (winner – loser)</div>
+        <div class="score-inputs">
+          <div class="score-wrap">
+            <label>Winner</label>
+            <input type="number" id="scoreWin" min="0" max="20" placeholder="0" oninput="updateProgress()">
+          </div>
+          <div class="score-dash">–</div>
+          <div class="score-wrap">
+            <label>Loser</label>
+            <input type="number" id="scoreLose" min="0" max="20" placeholder="0" oninput="updateProgress()">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORM -->
+<section class="form-section" id="entryForm">
+  <div class="section-inner" style="max-width:620px">
+    <div class="section-eyebrow">Almost there</div>
+    <h2 class="section-title">Claim your <span class="accent">entry.</span></h2>
+  </div>
+  <div class="form-card">
+    <div class="form-grid">
+      <div class="field" id="field-fname">
+        <label>First name</label>
+        <input type="text" id="fname" placeholder="Jordan" oninput="clearErr('field-fname')">
+        <span class="validation-msg">Required</span>
+      </div>
+      <div class="field" id="field-lname">
+        <label>Last name</label>
+        <input type="text" id="lname" placeholder="Smith" oninput="clearErr('field-lname')">
+        <span class="validation-msg">Required</span>
+      </div>
+      <div class="field full" id="field-email">
+        <label>Work email</label>
+        <input type="email" id="email" placeholder="jordan@yourcompany.com" oninput="clearErr('field-email')">
+        <span class="validation-msg">Enter a valid work email</span>
+      </div>
+      <div class="field full" id="field-company">
+        <label>Company</label>
+        <input type="text" id="company" placeholder="Acme Health Group" oninput="clearErr('field-company')">
+        <span class="validation-msg">Required</span>
+      </div>
+      <div class="field full" id="field-role">
+        <label>Role / Title</label>
+        <input type="text" id="role" placeholder="VP of Revenue Cycle" oninput="clearErr('field-role')">
+        <span class="validation-msg">Required</span>
+      </div>
+      <div class="field full">
+        <label>Country</label>
+        <select id="country">
+          <option value="US">United States</option>
+          <option value="" disabled>── Non-US (ineligible for prize) ──</option>
+          <option value="CA">Canada</option>
+          <option value="GB">United Kingdom</option>
+          <option value="AU">Australia</option>
+          <option value="OTHER">Other</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="btn-submit" onclick="submitEntry()">Submit My Picks →</button>
+    <p class="form-fine">By entering you agree to the official rules. One entry per person. Open to US residents only. No purchase necessary.</p>
+  </div>
+</section>
+
+<!-- CONFIRMATION -->
+<div id="confirmation">
+  <div class="confirm-card">
+    <div class="confirm-icon">🎊</div>
+    <h2 class="confirm-h">You're <span class="accent">in!</span></h2>
+    <p class="confirm-p">Your bracket is locked. We'll track it through the tournament and send you updates along the way.</p>
+    <div class="picks-recap" id="picksRecap"></div>
+    <div class="share-row">
+      <button class="share-btn" onclick="shareEntry()">🔗 Share the challenge</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <a href="https://www.camber.health">camber.health</a> &nbsp;·&nbsp;
+  <a href="https://www.camber.health/privacy-policy">Privacy</a> &nbsp;·&nbsp;
+  <a href="https://www.camber.health/terms-of-service">Terms</a>
+</footer>
+
+<script>
+const TEAMS = [
+  {name:"Argentina",flag:"🇦🇷",conf:"CONMEBOL"},
+  {name:"Brazil",flag:"🇧🇷",conf:"CONMEBOL"},
+  {name:"Uruguay",flag:"🇺🇾",conf:"CONMEBOL"},
+  {name:"Colombia",flag:"🇨🇴",conf:"CONMEBOL"},
+  {name:"Ecuador",flag:"🇪🇨",conf:"CONMEBOL"},
+  {name:"Chile",flag:"🇨🇱",conf:"CONMEBOL"},
+  {name:"Paraguay",flag:"🇵🇾",conf:"CONMEBOL"},
+  {name:"France",flag:"🇫🇷",conf:"UEFA"},
+  {name:"England",flag:"🇬🇧",conf:"UEFA"},
+  {name:"Spain",flag:"🇪🇸",conf:"UEFA"},
+  {name:"Germany",flag:"🇩🇪",conf:"UEFA"},
+  {name:"Portugal",flag:"🇵🇹",conf:"UEFA"},
+  {name:"Netherlands",flag:"🇳🇱",conf:"UEFA"},
+  {name:"Belgium",flag:"🇧🇪",conf:"UEFA"},
+  {name:"Italy",flag:"🇮🇹",conf:"UEFA"},
+  {name:"Croatia",flag:"🇭🇷",conf:"UEFA"},
+  {name:"Denmark",flag:"🇩🇰",conf:"UEFA"},
+  {name:"Switzerland",flag:"🇨🇭",conf:"UEFA"},
+  {name:"Austria",flag:"🇦🇹",conf:"UEFA"},
+  {name:"Poland",flag:"🇵🇱",conf:"UEFA"},
+  {name:"Serbia",flag:"🇷🇸",conf:"UEFA"},
+  {name:"Ukraine",flag:"🇺🇦",conf:"UEFA"},
+  {name:"Türkiye",flag:"🇹🇷",conf:"UEFA"},
+  {name:"Hungary",flag:"🇭🇺",conf:"UEFA"},
+  {name:"Slovakia",flag:"🇸🇰",conf:"UEFA"},
+  {name:"Scotland",flag:"🏴",conf:"UEFA"},
+  {name:"Czech Rep.",flag:"🇨🇿",conf:"UEFA"},
+  {name:"Romania",flag:"🇷🇴",conf:"UEFA"},
+  {name:"USA",flag:"🇺🇸",conf:"CONCACAF"},
+  {name:"Mexico",flag:"🇲🇽",conf:"CONCACAF"},
+  {name:"Canada",flag:"🇨🇦",conf:"CONCACAF"},
+  {name:"Costa Rica",flag:"🇨🇷",conf:"CONCACAF"},
+  {name:"Panama",flag:"🇵🇦",conf:"CONCACAF"},
+  {name:"Honduras",flag:"🇭🇳",conf:"CONCACAF"},
+  {name:"Morocco",flag:"🇲🇦",conf:"CAF"},
+  {name:"Senegal",flag:"🇸🇳",conf:"CAF"},
+  {name:"Nigeria",flag:"🇳🇬",conf:"CAF"},
+  {name:"Egypt",flag:"🇪🇬",conf:"CAF"},
+  {name:"Cameroon",flag:"🇨🇲",conf:"CAF"},
+  {name:"Tunisia",flag:"🇹🇳",conf:"CAF"},
+  {name:"Ghana",flag:"🇬🇭",conf:"CAF"},
+  {name:"South Africa",flag:"🇿🇦",conf:"CAF"},
+  {name:"Japan",flag:"🇯🇵",conf:"AFC"},
+  {name:"South Korea",flag:"🇰🇷",conf:"AFC"},
+  {name:"Saudi Arabia",flag:"🇸🇦",conf:"AFC"},
+  {name:"Iran",flag:"🇮🇷",conf:"AFC"},
+  {name:"Australia",flag:"🇦🇺",conf:"AFC"},
+  {name:"Qatar",flag:"🇶🇦",conf:"AFC"},
+];
+
+let picks = [null,null,null,null];
+let activeRegion = 'ALL';
+let searchQ = '';
+
+function renderTeams() {
+  const grid = document.getElementById('teamsGrid');
+  const allFull = picks.every(p => p !== null);
+  const filtered = TEAMS.filter(t =>
+    (activeRegion === 'ALL' || t.conf === activeRegion) &&
+    t.name.toLowerCase().includes(searchQ.toLowerCase())
+  );
+  grid.innerHTML = filtered.map(t => {
+    const picked   = picks.includes(t.name);
+    const disabled = allFull && !picked;
+    const safeName = encodeURIComponent(t.name);
+    return `<div class="team-chip${picked?' selected':''}${disabled?' disabled':''}" data-name="${t.name}">
+      <span class="team-flag">${t.flag}</span><span>${t.name}</span>
+    </div>`;
+  }).join('');
+  grid.querySelectorAll('.team-chip:not(.selected):not(.disabled)').forEach(el => {
+    el.addEventListener('click', () => {
+      const t = TEAMS.find(t => t.name === el.dataset.name);
+      if (t) selectTeam(t.name, t.flag);
+    });
+  });
+}
+
+function selectTeam(name, flag) {
+  if (picks.includes(name)) return;
+  const i = picks.indexOf(null);
+  if (i === -1) return;
+  picks[i] = name;
+  updateBracket(); updateProgress();
+}
+
+function clearSlot(i) {
+  if (!picks[i]) return;
+  picks[i] = null;
+  updateBracket(); updateProgress();
+}
+
+function updateBracket() {
+  picks.forEach((pick, i) => {
+    const slot = document.getElementById('slot-' + i);
+    const el   = document.getElementById('slot-team-' + i);
+    if (pick) {
+      const t = TEAMS.find(t => t.name === pick);
+      slot.classList.add('filled');
+      el.innerHTML = `<div class="slot-team-row"><span class="slot-flag">${t.flag}</span><span class="slot-name">${t.name}</span><button class="slot-remove" onclick="event.stopPropagation();clearSlot(${i})" aria-label="Remove">✕</button></div>`;
+    } else {
+      slot.classList.remove('filled');
+      el.innerHTML = '<span class="slot-empty">Empty</span>';
+    }
+  });
+  renderTeams();
+}
+
+function filterRegion(r, el) {
+  activeRegion = r;
+  document.querySelectorAll('.region-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderTeams();
+}
+
+function filterTeams() {
+  searchQ = document.getElementById('teamSearch').value;
+  renderTeams();
+}
+
+function updateProgress() {
+  const p  = picks.filter(Boolean).length;
+  const sw = document.getElementById('scoreWin').value !== '';
+  const sl = document.getElementById('scoreLose').value !== '';
+  const f  = ['fname','lname','email','company','role'].filter(id => document.getElementById(id).value.trim()).length;
+  const pct = Math.min(100, Math.round(((p + (sw?1:0) + (sl?1:0) + f) / 11) * 100));
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+function clearErr(id) {
+  document.getElementById(id)?.classList.remove('error');
+  updateProgress();
+}
+
+function validate() {
+  let ok = true;
+  [{id:'fname',fid:'field-fname',fn:v=>v.length>0},
+   {id:'lname',fid:'field-lname',fn:v=>v.length>0},
+   {id:'email',fid:'field-email',fn:v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)},
+   {id:'company',fid:'field-company',fn:v=>v.length>0},
+   {id:'role',fid:'field-role',fn:v=>v.length>0},
+  ].forEach(({id,fid,fn}) => {
+    if (!fn(document.getElementById(id).value.trim())) {
+      document.getElementById(fid).classList.add('error'); ok = false;
+    }
+  });
+  return ok;
+}
+
+function submitEntry() {
+  if (picks.some(p => p === null)) {
+    alert('Please fill all 4 podium spots before submitting.');
+    document.getElementById('picks').scrollIntoView({behavior:'smooth'});
+    return;
+  }
+  if (!validate()) {
+    document.getElementById('entryForm').scrollIntoView({behavior:'smooth'});
+    return;
+  }
+
+  const entry = {
+    firstname:        document.getElementById('fname').value.trim(),
+    lastname:         document.getElementById('lname').value.trim(),
+    email:            document.getElementById('email').value.trim(),
+    company:          document.getElementById('company').value.trim(),
+    jobtitle:         document.getElementById('role').value.trim(),
+    country:          document.getElementById('country').value,
+    marketing_opt_in: document.getElementById('optIn').checked,
+    wc_pick_1st:      picks[0],
+    wc_pick_2nd:      picks[1],
+    wc_pick_3rd:      picks[2],
+    wc_pick_4th:      picks[3],
+    wc_tiebreak:      (document.getElementById('scoreWin').value||'0') + '-' + (document.getElementById('scoreLose').value||'0'),
+    source:           'Camber World Cup Challenge',
+    hs_lead_status:   'Lead',
+    submitted_at:     new Date().toISOString(),
+  };
+
+  // ── INTEGRATION (uncomment one) ─────────────────────────────
+  //
+  fetch('https://api.hsforms.com/submissions/v3/integration/submit/9003766/bf4633b4-ba21-451d-aef5-6c3852d7a9db', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      fields: Object.entries(entry).map(([name,value]) => ({name, value: String(value)})),
+      context: { pageUri: window.location.href, pageName: 'Camber World Cup Challenge' }
+    })
+  }).catch(err => console.error('HubSpot submission error:', err));
+
+  console.log('Entry payload:', entry);
+  showConfirmation(entry);
+}
+
+function showConfirmation(entry) {
+  document.querySelectorAll('section, footer').forEach(el => el.style.display = 'none');
+  const conf = document.getElementById('confirmation');
+  conf.style.display = 'flex';
+
+  const medals = ['🥇','🥈','🥉','4️⃣'];
+  const places = ['1st Place','2nd Place','3rd Place','4th Place'];
+  const rows = [0,1,2,3].map(i => {
+    const t = TEAMS.find(t => t.name === picks[i]);
+    return `<div class="picks-recap-row"><span class="rr-medal">${medals[i]}</span><span class="rr-place">${places[i]}</span><span class="rr-flag">${t.flag}</span><span class="rr-name">${t.name}</span></div>`;
+  }).join('');
+  const score = entry.wc_tiebreak.replace('-',' – ');
+  const scoreRow = `<div class="picks-recap-row"><span class="rr-medal">⚽</span><span class="rr-place">Final</span><span class="rr-name" style="font-weight:600;font-size:1.05rem;color:var(--green)">${score}</span></div>`;
+
+  document.getElementById('picksRecap').innerHTML =
+    `<div class="picks-recap-hd">Your locked picks</div>${rows}${scoreRow}`;
+  document.getElementById('progressBar').style.width = '100%';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function shareEntry() {
+  const msg = 'I just entered the Camber World Cup Challenge — $500 cash + $500 to charity for the best bracket. Try to beat me!';
+  if (navigator.share) {
+    navigator.share({title:'Camber World Cup Challenge', text:msg, url:window.location.href});
+  } else {
+    navigator.clipboard.writeText(window.location.href);
+    alert('Link copied!');
+  }
+}
+
+document.addEventListener('DOMContentLoaded', renderTeams);
+</script>
+</body>
+</html>
