@@ -831,7 +831,8 @@ function submitEntry() {
 }
 
 function showConfirmation(entry) {
-  document.querySelectorAll('section, footer').forEach(el => el.style.display = 'none');
+  document.querySelectorAll('section').forEach(el => el.style.display = 'none');
+  document.querySelector('footer').style.display = 'none';
   const conf = document.getElementById('confirmation');
   conf.style.display = 'flex';
 
@@ -839,13 +840,14 @@ function showConfirmation(entry) {
   const places = ['1st Place','2nd Place','3rd Place','4th Place'];
   const rows = [0,1,2,3].map(i => {
     const t = TEAMS.find(t => t.name === picks[i]);
-    return `<div class="picks-recap-row"><span class="rr-medal">${medals[i]}</span><span class="rr-place">${places[i]}</span><span class="rr-flag">${t.flag}</span><span class="rr-name">${t.name}</span></div>`;
+    if (!t) return '';
+    return '<div class="picks-recap-row"><span class="rr-medal">' + medals[i] + '</span><span class="rr-place">' + places[i] + '</span><span class="rr-flag">' + t.flag + '</span><span class="rr-name">' + t.name + '</span></div>';
   }).join('');
-  const score = entry.wc_tiebreak.replace('-',' – ');
-  const scoreRow = `<div class="picks-recap-row"><span class="rr-medal">⚽</span><span class="rr-place">Final</span><span class="rr-name" style="font-weight:600;font-size:1.05rem;color:var(--green)">${score}</span></div>`;
+  const score = (entry.wc_tiebreak || '0-0').replace('-',' – ');
+  const scoreRow = '<div class="picks-recap-row"><span class="rr-medal">⚽</span><span class="rr-place">Final</span><span class="rr-name" style="font-weight:600;font-size:1.05rem;color:var(--green)">' + score + '</span></div>';
 
   document.getElementById('picksRecap').innerHTML =
-    `<div class="picks-recap-hd">Your locked picks</div>${rows}${scoreRow}`;
+    '<div class="picks-recap-hd">Your locked picks</div>' + rows + scoreRow;
   document.getElementById('progressBar').style.width = '100%';
   window.scrollTo({top:0,behavior:'smooth'});
 }
